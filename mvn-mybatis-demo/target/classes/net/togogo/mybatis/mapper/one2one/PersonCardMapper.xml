@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.togogo.mybatis.mapper.one2one.PersonCardMapper">
+	<resultMap type="net.togogo.mybatis.entity.one2one.Card" id="getCard">
+		<id property="cardId"  column="card_id" />
+		<result  property="cardNo" column="card_no" />
+		<association property="person" javaType="net.togogo.mybatis.entity.one2one.Person">
+			<id property="personId" column="person_id" />
+			<result property="personName" column="person_name"/>
+		</association>
+	</resultMap>
+	<select id="getById" parameterType="int" resultMap="getCard">
+		select a.person_id,a.person_name,b.card_id,b.card_no 
+		from person a,card b where a.person_id=b.person_id and b.card_id=#{cardId}; 
+	</select>
+</mapper>

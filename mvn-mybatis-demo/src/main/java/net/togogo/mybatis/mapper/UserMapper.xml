@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.togogo.mybatis.mapper.UserMapper">
+	<!-- 插入用户信息 -->
+	<insert id="insert" parameterType="net.togogo.mybatis.entity.User">
+		insert into
+		t_user_01(username,password,role,create_date) values(
+		#{username,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{role,jdbcType=VARCHAR},
+		#{createtime,jdbcType=DATE}
+		)
+	</insert>
+	
+	<!--根据ID删除用户  -->
+	<delete id="deleteById" parameterType="int">
+		delete from t_user_01
+		where user_id=#{id};
+	</delete>
+	
+	<!--更改用户信息  -->
+	<update id="update" parameterType="net.togogo.mybatis.entity.User">
+		update t_user_01 set
+		username=#{username,jdbcType=VARCHAR},password=#{password,jdbcType=VARCHAR},
+		role=#{role,jdbcType=VARCHAR}
+		where user_id=#{id};
+	</update>
+	
+	<!-- 查询用户信息 -->
+	<select id="get" parameterType="integer" resultType="net.togogo.mybatis.entity.User">
+		select
+		user_id id,username,password,role,create_date createtime from t_user_01
+		where user_id = #{xSId};
+	</select>
+	
+	<!--查询所有用户信息  -->
+	<select id="getAll" resultType="net.togogo.mybatis.entity.User">
+		select
+		user_id id,username,password,role,create_date createtime from t_user_01;
+	</select>
+	
+	<!--批量删除  -->
+	<delete id="deleteByIds" parameterType="int">
+		delete from t_user_01
+		where user_id in <foreach collection="array" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<!-- 批量删除List对象 -->
+	<delete id="deleteByListIds" parameterType="int">
+		delete from t_user_01
+		where user_id in <foreach collection="list" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<!--根据条件查询  -->					
+	<select id="getUser" parameterType="java.util.Properties" resultType="net.togogo.mybatis.entity.User">
+		select
+		user_id id,username,password,role,create_date createtime from t_user_01 
+		where username=#{username} and role=#{role};
+	</select>
+	
+	<!--分页查询  -->
+	<select id="getByPage" parameterType="net.togogo.mybatis.page.Page" resultType="net.togogo.mybatis.entity.User">
+		select
+		user_id id,username,password,role,create_date createtime from t_user_01 limit #{start},#{rows};
+	</select>
+	
+	<!--投影查询  mybatis版本太新的不能支持 3.22的就可以 -->
+	<!-- <resultMap type="java.util.Map" id="userMap">
+		<result property="username" javaType="java.lang.String"/>
+		<result property="password" javaType="java.lang.String"/>
+	</resultMap>
+	<select id="getByCols" resultMap="userMap">
+		select username,password from t_user_01;
+	</select>  -->
+	
+	<!-- 					SQL动态查询		                        -->
+	
+	
+</mapper>
